@@ -23,12 +23,7 @@ namespace IO.Swagger.Logic
             byte[] leftContent = Utils.DecodeBase64(leftPageDict[(long)key]);
             byte[] rightContent = Utils.DecodeBase64(rightPageDict[(long)key]);
 
-            if (leftContent.Equals(rightContent))
-            {
-                ResponseBody rb = new ResponseBody();
-                rb.DiffResultType = ResponseBody.DiffResultTypeEnum.EqualsEnum;
-                return rb;
-            } else if (leftContent.Length != rightContent.Length)
+            if (leftContent.Length != rightContent.Length)
             {
                 ResponseBody rb = new ResponseBody();
                 rb.DiffResultType = ResponseBody.DiffResultTypeEnum.SizeDoNotMatchEnum;
@@ -73,6 +68,13 @@ namespace IO.Swagger.Logic
 
                     d.Add(item);
                 }
+                if (d.Capacity == 0)
+                {
+                    ResponseBody rb2 = new ResponseBody();
+                    rb2.DiffResultType = ResponseBody.DiffResultTypeEnum.EqualsEnum;
+                    return rb2;
+                }
+
                 return rb;
             }
 
