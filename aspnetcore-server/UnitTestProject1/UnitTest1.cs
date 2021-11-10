@@ -87,7 +87,7 @@ namespace UnitProject1
 
             Dictionary<long, string> contentDict2 = new Dictionary<long, string>();
             RequestBody body2 = new RequestBody();
-            string data2 = "AAAQQQ==";
+            string data2 = "AQABAQ==";
             body2.Data = data2;
             Idiff.Add(contentDict2, key, body2);
             Assert.AreEqual(data2, contentDict2[key]);

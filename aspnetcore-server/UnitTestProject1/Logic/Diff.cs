@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnitTestProject1.Logic;
 
 namespace IO.Swagger.Logic
 {
@@ -19,8 +20,8 @@ namespace IO.Swagger.Logic
 
         public ResponseBody Compare(Dictionary<long, string> leftPageDict, Dictionary<long, string> rightPageDict, long key)
         {
-            string leftContent = leftPageDict[(long)key];
-            string rightContent = rightPageDict[(long)key];
+            byte[] leftContent = Utils.DecodeBase64(leftPageDict[(long)key]);
+            byte[] rightContent = Utils.DecodeBase64(rightPageDict[(long)key]);
 
             if (leftContent.Equals(rightContent))
             {
@@ -38,29 +39,40 @@ namespace IO.Swagger.Logic
                 rb.DiffResultType = ResponseBody.DiffResultTypeEnum.ContentDoNotMatchEnum;
                 rb.Diffs = new DiffObject();
                 DiffObject d = rb.Diffs;
-                int offset = 0; int lenght = 0;
+                int offset = -1; int lenght = 0;
                 for (int cn = 0; cn < leftContent.Length; cn ++)
                 {
                     if (leftContent[cn] == rightContent[cn])
                     {
+                        if (offset != -1)
+                        {
+                            Item item = new Item();
+                            item.lenght = lenght;
+                            item.offset = offset;
+
+                            d.Add(item);
+                        }
                         lenght = 0;
-                        offset = 0;
+                        offset = -1;
                     }
                     else
                     {
-                        if (offset == 0)
+                        if (offset == -1)
                         {
                             offset = cn;
                         } 
                         lenght++;
-                        Item item = new Item();
-                        item.lenght = lenght;
-                        item.offset = offset;
 
-                        d.Add(item);
                     }
                 }
+                if (offset != -1)
+                {
+                    Item item = new Item();
+                    item.lenght = lenght;
+                    item.offset = offset;
 
+                    d.Add(item);
+                }
                 return rb;
             }
 

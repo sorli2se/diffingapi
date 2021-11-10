@@ -1,6 +1,6 @@
 # diffingapi
 
-Diffing API
+Binary Diffing API
 
 # Assignment Info
 • Provided 2 http endpoints (<host>/v1/diff/<ID>/left and <host>/v1/diff/<ID>/right) that accept 
@@ -45,6 +45,3 @@ To test internal logic run unit test on folder aspnetcore-server\UnitTestProject
 
 To test functionality run on folder csharp-client\IntegrationTestProject1
 
-# ToDo
-
-Diff algorithm basically works but is not functional.
