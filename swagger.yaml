@@ -1,0 +1,118 @@
+swagger: "2.0"
+info:
+  description: "This is a sample diff server."
+  version: "1.0.0"
+  title: "Swagger diff server"
+basePath: "/v1"
+schemes:
+- "http"
+paths:
+  /diff/{diffId}/left:
+    put:
+      tags:
+      - "left"
+      summary: "Update an left side"
+      description: ""
+      operationId: "updateLeft"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "diffId"
+        in: "path"
+        description: "diff of ID to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Left object that needs to be added for the diff"
+        required: true
+        schema:
+          $ref: "#/definitions/RequestBody"
+      responses:
+        "201":
+          description: "Created"
+        "400":
+          description: "Bad Request"
+  /diff/{diffId}/right:
+    put:
+      tags:
+      - "right"
+      summary: "Update an right side"
+      description: ""
+      operationId: "updateRight"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "diffId"
+        in: "path"
+        description: "ID of content to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Right object that needs to be added for the diff"
+        required: true
+        schema:
+          $ref: "#/definitions/RequestBody"
+      responses:
+        "201":
+          description: "Created"
+        "400":
+          description: "Bad Request"
+  /diff/{diffId}/:
+    get:
+      tags:
+      - "diff"
+      summary: "get status of diff"
+      description: ""
+      operationId: "getDiff"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "diffId"
+        in: "path"
+        description: "ID of content to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ResponseBody"
+        "404":
+          description: "Not Found"
+definitions:
+  ResponseBody:
+    type: "object"
+    properties:
+      diffResultType:
+        type: "string"
+        example: Equals or ContentDoNotMatch
+        enum:
+        - "Equals"
+        - "ContentDoNotMatch"
+        - "SizeDoNotMatch"
+      diffs:
+        $ref: "#/definitions/Diffs"
+  RequestBody:
+    type: "object"
+    properties:
+      data:
+        type: "string"
+  Diffs:
+    type: "array"
+    items:
+      properties:
+        offset:
+          type: "integer"
+          format: "int64"
+        length:
+          type: "integer"
+          format: "int64"
